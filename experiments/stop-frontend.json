@@ -1,0 +1,70 @@
+{
+  "version": "1.0.0",
+  "title": "Terminate the Frontend service should not prevent application from running",
+  "description": "Our architecture does not have any dependency with the Frontend.",
+  "tags": [
+    "frontend",
+    "aws",
+    "ecs",
+    "docker"
+  ],
+  "configuration": {
+    "api":  {
+      "type": "env",
+      "key": "API"
+    },
+    "frontend":  {
+      "type": "env",
+      "key": "FRONTEND"
+    }
+  },
+  "steady-state-hypothesis": {
+    "title": "Services are all available and healthy",
+    "probes": [
+      {
+        "type": "probe",
+        "name": "applications-should-be-alive-and-healthy",
+        "tolerance": {
+          "target": "stdout",
+          "type": "range",
+          "range": [2, 3]
+        },
+        "provider": {
+          "type": "process",
+          "path": "bash",
+          "arguments": [
+            "./aws.sh"
+          ]
+        }
+      },
+      {
+        "type": "probe",
+        "name": "api-must-respond",
+        "tolerance": 200,
+        "provider": {
+          "type": "http",
+          "verify_tls": true,
+          "url": "${api}"
+        }
+      }
+    ]
+  },
+  "method": [
+    {
+      "type": "action",
+      "name": "stop-frontend-service",
+      "provider": {
+        "type": "process",
+        "path": "bash",
+        "arguments": [
+          "./stop.sh",
+          "blog"
+        ]
+      },
+      "pauses": {
+        "after": 2
+      }
+    }
+  ],
+  "rollbacks": []
+}
