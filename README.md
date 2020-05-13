@@ -2,7 +2,7 @@
 
 
 If you need more context for this chaos experiments, I published a series of
-articles on [jorgechato.com/tag/platform-v1/](https://jorgechato.com/tag/platform-v1/).
+articles on [jorgechato.com/how-to-destroy-your-aws-services](https://jorgechato.com/how-to-destroy-your-aws-services/).
 
 
 ## Run
